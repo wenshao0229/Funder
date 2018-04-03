@@ -51,7 +51,7 @@
 		var btns = document.getElementsByClassName('main-nav-btn');
 
 		for (var i = 0; i < btns.length; i++) {
-			btns[i].className =btns[i].className.replace(/\bactive\b/, '');
+			btns[i].className = btns[i].className.replace(/\bactive\b/, '');
 		}
 
 		// active the one that has id = btnId

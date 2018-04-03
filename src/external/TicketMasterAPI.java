@@ -21,10 +21,10 @@ public class TicketMasterAPI implements ExternalAPI{
 		TicketMasterAPI tmApi = new TicketMasterAPI();
 		// Mountain View, CA
 		tmApi.queryAPI(37.38, -122.08);
-		// London, UK
-		// tmApi.queryAPI(51.503364, -0.12);
-		// Houston, TX
-		//tmApi.queryAPI(29.682684, -95.295410);
+//		// London, UK
+//		// tmApi.queryAPI(51.503364, -0.12);
+//		// Houston, TX
+//		//tmApi.queryAPI(29.682684, -95.295410);
 	}
 	
 	private static final String API_HOST = "app.ticketmaster.com";
@@ -71,10 +71,11 @@ public class TicketMasterAPI implements ExternalAPI{
 
 			// Now read response body to get events data
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String inputLine;
+			String inputLine = in.readLine();
 			StringBuilder response = new StringBuilder();
-			while ((inputLine = in.readLine()) != null) {
+			while (inputLine != null) {
 				response.append(inputLine);
+				inputLine = in.readLine();
 			}
 			in.close();
 
@@ -189,8 +190,8 @@ public class TicketMasterAPI implements ExternalAPI{
 		if (!event.isNull("classifications")) {
 			JSONArray array = event.getJSONArray("classifications");
 			for (int i = 0; i < array.length(); i++) {
-				JSONObject classification = array.getJSONObject(i);
-				JSONObject segment = classification.getJSONObject("segment");
+				JSONObject object = array.getJSONObject(i);
+				JSONObject segment = object.getJSONObject("segment");
 				categories.add(segment.getString("name"));
 			}
 		}
