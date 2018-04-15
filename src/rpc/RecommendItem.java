@@ -35,8 +35,7 @@ public class RecommendItem extends HttpServlet {
 		String userId = request.getParameter("user_id");
 		double lat = Double.parseDouble(request.getParameter("lat"));
 		double lon = Double.parseDouble(request.getParameter("lon"));
-		GeoRecommendation recommendation = new GeoRecommendation();
-		List<Item> items = recommendation.recommendItems(userId, lat, lon);
+		List<Item> items = GeoRecommendation.recommendItems(userId, lat, lon);
 
 		JSONArray result = new JSONArray();
 		try {

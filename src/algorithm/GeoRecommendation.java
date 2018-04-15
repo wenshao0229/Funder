@@ -13,8 +13,7 @@ import entity.Item;
 
 // Recommendation based on geo distance and similar categories.
 public class GeoRecommendation {
-
-	public List<Item> recommendItems(String userId, double lat, double lon) {
+	public static List<Item> recommendItems(String userId, double lat, double lon) {
 		DBConnection conn = DBConnectionFactory.getDBConnection();
 
 		Set<String> favoriteItems = conn.getFavoriteItemIds(userId);  // step 1  // db queries
@@ -34,10 +33,9 @@ public class GeoRecommendation {
 			List<Item> items = conn.searchItems(userId, lat, lon, category);  // call external API
 			recommendedItems.addAll(items);
 		}
-
-		// Student question: why we use list now instead of set?
-		// Answer: because we will have ranking now.
-		List<Item> filteredItems = new ArrayList<>();  // step 4
+			
+		// only recommend the event witch the users didn't set favorite
+		List<Item> filteredItems = new ArrayList<>();
 		for (Item item : recommendedItems) {
 			if (!favoriteItems.contains(item.getItemId())) {
 				filteredItems.add(item);
@@ -48,9 +46,6 @@ public class GeoRecommendation {
 		Collections.sort(filteredItems, new Comparator<Item>() {
 			@Override
 			public int compare(Item item1, Item item2) {
-				// Student question: can we make this ranking even better with
-				// more dimensions?
-				// What other feathers can be used here?
 				double distance1 = getDistance(item1.getLatitude(), item1.getLongitude(), lat, lon);
 				double distance2 = getDistance(item2.getLatitude(), item2.getLongitude(), lat, lon);
 				// return the increasing order of distance.
