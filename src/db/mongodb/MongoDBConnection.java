@@ -36,20 +36,18 @@ public class MongoDBConnection implements DBConnection {
 
 	@Override
 	public void setFavoriteItems(String userId, List<String> itemIds) {
-		db.getCollection("users").updateOne(new Document("user_id", userId), 
-				new Document("$push", new Document("favorite", new Document("$each", itemIds))));
+		db.getCollection("users").updateOne(eq("user_id", userId), eq("$push", eq("favorite", itemIds)));
 	}
 
 	@Override
 	public void unsetFavoriteItems(String userId, List<String> itemIds) {
-		db.getCollection("users").updateOne(new Document("user_id", userId),
-				new Document("$pullAll", new Document("favorite", itemIds)));
+		db.getCollection("users").updateOne(eq("user_id", userId), eq("$pull", eq("favorite", itemIds)));
 	}
 
 	@Override
 	public Set<String> getFavoriteItemIds(String userId) {
 		Set<String> favoriteItems = new HashSet<>();
-		FindIterable<Document> iterable = db.getCollection("users").find(eq("user_id",userId));
+		FindIterable<Document> iterable = db.getCollection("user").find(eq("user_id", userId));
 		if (iterable.first().containsKey("favorite")) {
 			@SuppressWarnings("unchecked")
 			List<String> list = (List<String>)iterable.first().get("favorite");
