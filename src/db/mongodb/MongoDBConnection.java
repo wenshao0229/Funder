@@ -36,12 +36,12 @@ public class MongoDBConnection implements DBConnection {
 
 	@Override
 	public void setFavoriteItems(String userId, List<String> itemIds) {
-		db.getCollection("users").updateOne(eq("user_id", userId), eq("$push", eq("favorite", itemIds)));
+		db.getCollection("users").updateOne(eq("user_id", userId), eq("$pushAll", eq("favorite", eq("$each", itemIds))));
 	}
 
 	@Override
 	public void unsetFavoriteItems(String userId, List<String> itemIds) {
-		db.getCollection("users").updateOne(eq("user_id", userId), eq("$pull", eq("favorite", itemIds)));
+		db.getCollection("users").updateOne(eq("user_id", userId), eq("$pullAll", eq("favorite", eq("$each", itemIds))));
 	}
 
 	@Override
