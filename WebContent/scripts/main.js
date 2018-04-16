@@ -16,6 +16,9 @@
 		initGeoLocation();
 	}
 
+	// DOM access helper
+	// no options -> get DOM element
+	// with options -> create DOM element
 	function $(tag, options) {
 		if (!options) {
 			return document.getElementById(tag);
@@ -110,6 +113,7 @@
 	  }
 	}
 	
+	// put item list in container
 	function listItems(items) {
 		// Clear the current results
 		var itemList = $('item-list');
@@ -149,7 +153,7 @@
 		// title
 		var title = $('a', {
 			href : item.url,
-			target : '_blank',
+			target : '_blank',		// open the link in new browser page
 			className : 'item-name'
 		});
 		title.innerHTML = item.name;
@@ -173,7 +177,7 @@
 			stars.appendChild(star);
 		}
 
-		if (('' + item.rating).match(/\.5$/)) {
+		if (('' + item.rating).match(/\.5$/)) {		// check if rating has half stars
 			stars.appendChild($('i', {
 				className : 'fa fa-star-half-o'
 			}));
@@ -188,21 +192,18 @@
 			className : 'item-address'
 		});
 
-		//address.innerHTML = item.address.replace(/,/g, '<br/>').replace(/\"/g,'');
 		var addressHTML =  item.address + "<br/>" + item.city;
 		address.innerHTML = addressHTML;
-
 
 		li.appendChild(address);
 
 		// favorite link
 		var favLink = $('p', {
-			className : 'fav-link'
+			className : 'fav-link',
+			onclick = function() {
+				changeFavoriteItem(item_id);
+			}
 		});
-
-		favLink.onclick = function() {
-			changeFavoriteItem(item_id);
-		};
 
 		favLink.appendChild($('i', {
 			id : 'fav-icon-' + item_id,
@@ -215,9 +216,11 @@
 	}
 	
 	function initGeoLocation() {
+		// check browser supports geo function first
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(onPositionUpdated,
 					onLoadPositionFailed, {
+						// expired time in cache of last geo search
 						maximumAge : 60000
 					});
 			showLoadingMessage('Retrieving your location...');
@@ -286,6 +289,7 @@
 		}
 	}
 	
+	// API 1: get nearby events
 	function loadNearbyItems() {
 		console.log('loadNearbyItems');
 		activeBtn('nearby-btn');
@@ -315,6 +319,7 @@
 		});
 	}
 	
+	// API 2: get favorite events list
 	function loadFavoriteItems() {
 		activeBtn('fav-btn');
 
@@ -339,6 +344,7 @@
 		});
 	}
 	
+	// API 3: get recommended events
 	function loadRecommendedItems() {
 		activeBtn('recommend-btn');
 
@@ -352,23 +358,16 @@
 		showLoadingMessage('Loading recommended items...');
 
 		// make AJAX call
-		ajax(
-				'GET',
-				url + '?' + params,
-				req,
-				// successful callback
-				function(res) {
+		ajax('GET', url + '?' + params, req, function(res) {
 					var items = JSON.parse(res);
 					if (!items || items.length === 0) {
 						showWarningMessage('No recommended item. Make sure you have favorites.');
 					} else {
 						listItems(items);
 					}
-				},
-				// failed callback
-				function() {
+				}, function() {
 					showErrorMessage('Cannot load recommended items.');
-				});
+		});
 	}
 
 	// Toggle favorite icon
