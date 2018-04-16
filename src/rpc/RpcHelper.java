@@ -34,12 +34,6 @@ public class RpcHelper {
 			response.setContentType("application/json");
 			response.addHeader("Access-Control-Allow-Origin", "*");
 			PrintWriter out = response.getWriter();
-//			if (array.length() < 1) {
-//				array.put(new JSONObject().put("Result", "No Events Near Searched Place"));
-//				out.print(array);
-//			} else {
-//				out.print(array);
-//			}
 			out.print(array);
 			out.flush();
 			out.close();
@@ -55,28 +49,15 @@ public class RpcHelper {
 		JSONObject obj = null;
 		try {
 			BufferedReader in = request.getReader();
-			while ((inputLine = in.readLine()) != null ) {
+			inputLine = in.readLine();
+			while (inputLine != null) {
 				sb.append(inputLine);
 			}
 			in.close();
 			obj = new JSONObject(sb.toString());
-		} catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return obj;
 	}
-
-	// Converts a list of Item objects to JSONArray.
-	public static JSONArray getJSONArray(List<Item> items) {
-		JSONArray result = new JSONArray();
-		try {
-			for (Item item : items) {
-				result.put(item.toJSONObject());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-
 }

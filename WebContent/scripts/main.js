@@ -80,14 +80,7 @@
 	// Send the request to send-ajax-data.php
 	xhr.send(null);
 
-	/**
-	 * AJAX helper
-	 * 
-	 * @param method - GET|POST|PUT|DELETE
-	 * @param url - API end point
-	 * @param callback - This the successful callback
-	 * @param errorHandler - This is the failed callback
-	 */
+	// AJAX helper
 	function ajax(method, url, data, callback, errorHandler) {
 	  var xhr = new XMLHttpRequest();
 
@@ -128,7 +121,7 @@
 	}
 
 	function addItem(itemList, item) {
-		var item_id = item.item_id;
+		var item_id = item.itemId;
 
 		// create the <li> tag and specify the id and class attributes
 		var li = $('li', {
@@ -141,9 +134,9 @@
 		li.dataset.favorite = item.favorite;
 
 		// item image
-		if (item.image_url) {
+		if (item.imageUrl) {
 			li.appendChild($('img', {
-				src : item.image_url
+				src : item.imageUrl
 			}));
 		} else {
 			li.appendChild($('img', {
@@ -292,10 +285,7 @@
 			xhr.send(data);
 		}
 	}
-	/**
-	 * API #1 Load the nearby items API end point: [GET]
-	 * /Titan/search?user_id=1111&lat=37.38&lon=-122.08
-	 */
+	
 	function loadNearbyItems() {
 		console.log('loadNearbyItems');
 		activeBtn('nearby-btn');
@@ -325,10 +315,6 @@
 		});
 	}
 	
-	/**
-	 * API #2 Load favorite (or visited) items API end point: [GET]
-	 * /Titan/history?user_id=1111
-	 */
 	function loadFavoriteItems() {
 		activeBtn('fav-btn');
 
@@ -353,10 +339,6 @@
 		});
 	}
 	
-	/**
-	 * API #3 Load recommended items API end point: [GET]
-	 * /Titan/recommendation?user_id=1111
-	 */
 	function loadRecommendedItems() {
 		activeBtn('recommend-btn');
 
@@ -389,13 +371,7 @@
 				});
 	}
 
-	/**
-	 * API #4 Toggle favorite (or visited) items
-	 * 
-	 * @param item_id -
-	 *            The item business id
-	 * 
-	 */
+	// Toggle favorite icon
 	function changeFavoriteItem(item_id) {
 		// Check whether this item has been visited or not
 		var li = $('item-' + item_id);
