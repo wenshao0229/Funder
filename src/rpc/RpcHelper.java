@@ -44,7 +44,7 @@ public class RpcHelper {
 
 	// Parses a JSONObject from http request.
 	public static JSONObject readJsonObject(HttpServletRequest request) {
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		String inputLine = null;
 		JSONObject obj = null;
 		try {
@@ -52,6 +52,7 @@ public class RpcHelper {
 			inputLine = in.readLine();
 			while (inputLine != null) {
 				sb.append(inputLine);
+				inputLine = in.readLine();
 			}
 			in.close();
 			obj = new JSONObject(sb.toString());

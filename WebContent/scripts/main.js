@@ -8,6 +8,7 @@
 
 	
 	function init() {
+		console.log("test");
 		// Register event listeners
 		$('nearby-btn').addEventListener('click', loadNearbyItems);
 		$('fav-btn').addEventListener('click', loadFavoriteItems);
@@ -61,27 +62,6 @@
 		var btn = $(btnId);
 		btn.className += ' active';
 	}
-
-	// Initialize the HTTP request.
-	var xhr = new XMLHttpRequest();
-	xhr.open('get', 'send-ajax-data.php');
-
-	// Track the state changes of the request.
-	xhr.onreadystatechange = function () {
-		var DONE = 4; // readyState 4 means the request is done.
-		var OK = 200; // status 200 is a successful return.
-
-		if (xhr.readyState === DONE) {
-			if (xhr.status === OK) {
-				console.log(xhr.responseText); // 'This is the returned text.'
-			} else {
-				console.log('Error: ' + xhr.status); // An error occurred during the request.
-			}
-		}
-	};
-
-	// Send the request to send-ajax-data.php
-	xhr.send(null);
 
 	// AJAX helper
 	function ajax(method, url, data, callback, errorHandler) {
@@ -200,10 +180,11 @@
 		// favorite link
 		var favLink = $('p', {
 			className : 'fav-link',
-			onclick = function() {
-				changeFavoriteItem(item_id);
-			}
 		});
+		
+		favLink.onclick = function() {
+			changeFavoriteItem(item_id);
+		};
 
 		favLink.appendChild($('i', {
 			id : 'fav-icon-' + item_id,
@@ -387,13 +368,14 @@
 
 		ajax(method, url, req,
 		// successful callback
-		function(res) {
-			var result = JSON.parse(res);
-			if (result.result === 'SUCCESS') {
-				li.dataset.favorite = favorite;
-				favIcon.className = favorite ? 'fa fa-heart' : 'fa fa-heart-o';
+			function(res) {
+				var result = JSON.parse(res);
+				if (result.result === 'SUCCESS') {
+					li.dataset.favorite = favorite;
+					favIcon.className = favorite ? 'fa fa-heart' : 'fa fa-heart-o';
+				}
 			}
-		});
+		);
 	}
 
 	init();
